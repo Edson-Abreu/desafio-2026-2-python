@@ -1,8 +1,6 @@
-# Assistente Acadêmico Unoesc — IA Generativa com RAG
+# Assistente Acadêmico  — 
 
-Este repositório contém a implementação final do **Assistente Acadêmico Inteligente para a Unoesc**. O projeto consiste em uma solução de IA ponta a ponta que utiliza a arquitetura **RAG (Retrieval-Augmented Generation)** para responder a dúvidas de alunos com base exclusivamente em documentos e regras institucionais cadastradas por administradores. 
-
-A solução foi construída utilizando práticas modernas de desenvolvimento, arquitetura de software modular, segurança via tokens JWT e interface gráfica rica para estudantes e administradores.
+Este repositório contém a implementação final do **Assistente Acadêmico para a Unoesc**. O projeto consiste em uma solução de IA ponta a ponta que utiliza a arquitetura **RAG (Retrieval-Augmented Generation)** para responder a dúvidas de alunos com base exclusivamente em documentos e regras institucionais cadastradas por administradores. 
 
 ---
 
@@ -102,23 +100,16 @@ Com a `venv` ativa, instale as bibliotecas necessárias:
 pip install -r requirements.txt
 ```
 
-### Passo 4: Configurar as Variáveis de Ambiente (`.env`)
-Crie um arquivo `.env` na raiz do projeto (se já não houver) com as seguintes configurações:
-```env
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/unoesc_db
-JWT_SECRET=sua_chave_secreta_super_segura_aqui_para_criptografia_do_token_jwt
-JWT_ALGORITHM=HS256
-ACCESS_TOKEN_EXPIRE_MINUTES=60
-```
 
-### Passo 5: Iniciar a API do Backend (FastAPI)
+
+### Passo 4: Iniciar a API do Backend (FastAPI)
 Com o banco de dados ativo, execute o servidor FastAPI com o comando atualizado da arquitetura modular:
 ```bash
 uvicorn src.main:app --reload
 ```
 A API estará disponível em `http://localhost:8000`. Você pode acessar a documentação interativa automatizada (Swagger UI) em: **`http://localhost:8000/docs`**.
 
-### Passo 6: Iniciar o Frontend (Streamlit)
+### Passo 5: Iniciar o Frontend (Streamlit)
 Em um novo terminal (mantendo a API rodando), ative a `venv` e execute a interface gráfica:
 ```bash
 streamlit run frontend/app_streamlit.py
@@ -131,15 +122,3 @@ O navegador abrirá automaticamente em `http://localhost:8501` mostrando o assis
 Para acessar o painel de gerenciamento e alimentar a base de conhecimento no Streamlit ou testar as rotas protegidas no Swagger:
 * **Usuário:** `unoesc`
 * **Senha:** `senha123`
-
----
-
-## 📈 Decisões de Projeto e Evoluções Futuras (Roadmap)
-
-Durante o desenvolvimento do MVP, tomamos decisões estratégicas visando a simplicidade de execução para a banca avaliadora, prevendo também as próximas etapas de evolução do software:
-
-1.  **Busca Avançada à Prova de Acentos via Python:** Em vez de exigir que a banca configure extensões adicionais diretamente dentro do banco de dados (como o `unaccent` do Postgres), resolvemos o problema de correspondência textual limpando acentos tanto das pesquisas do estudante quanto dos conteúdos do banco de dados usando a biblioteca nativa `unicodedata` do Python.
-2.  **Roteamento Centralizado Híbrido:** Mantivemos a declaração das rotas no `src/main.py` para evitar quebras de caminhos complexos no Frontend Streamlit, dividindo em módulos as pastas de banco de dados (`db/`), segurança (`core/`) e serviços de IA (`services/`).
-3.  **Roadmap de Engenharia (Futuro):**
-    * **Embeddings e Banco de Dados Vetorial:** Substituir a busca baseada em palavras-chave (`ILIKE` / correspondência textual) por uma busca semântica real usando vetores e modelos de embedding (ex: *SentenceTransformers*) salvando-os no `pgvector` (extensão do PostgreSQL) ou em uma base vetorial leve como o *ChromaDB*. Isso permitirá que a IA encontre o contexto correto buscando por sinônimos (ex: buscar por "trancamento" e encontrar a regra cadastrada com a palavra "paralisação").
-    * **Modularização completa de rotas:** Desmembrar as rotas do `main.py` usando `APIRouter` do FastAPI criando subpastas na camada `/api` para rotas públicas e rotas estritamente protegidas por segurança JWT.
