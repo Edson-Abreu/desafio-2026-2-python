@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Text, DateTime, Float
 from datetime import datetime
-from database import Base
+from src.db.database import Base
 
 class Conhecimento(Base):
     """RF02 - Tabela da Base de Conhecimento para a IA consultar"""
@@ -20,4 +20,4 @@ class HistoricoLog(Base):
     pergunta = Column(Text, nullable=False)
     resposta = Column(Text, nullable=False)
     data = Column(DateTime, default=datetime.utcnow, index=True)
-    tempo_processamento = Column(Float, nullable=False) # Guardaremos em segundos
+    tempo_processamento = Column(Float, nullable=False)
